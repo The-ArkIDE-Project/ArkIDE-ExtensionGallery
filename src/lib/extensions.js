@@ -15,6 +15,15 @@ export default [
         notes: ""
     },
     {
+        name: "Json Number Array Operations",
+        description: "A nice extension that adds useful operation blocks for Json Number Arrays.",
+        code: "Ark/jsonnumberarray.js",
+        banner: "Ark/jsonant.svg",
+        creator: "Arc360",
+        creatorAlias: "Ark",
+        notes: ""
+    },
+    {
         name: "Pen+",
         description: "Extended pen section! Adds blocks for drawing triangles using textures and tints, drawing images and editing their pixels, etc.",
         code: "ObviousAlexC/PenPlus.js",

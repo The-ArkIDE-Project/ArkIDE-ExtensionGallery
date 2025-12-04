@@ -14,7 +14,7 @@
     let unstable = $derived(props.unstable || false);
     let unstableReason = $derived(props.unstableReason || "This extension is unstable. Use at your own risk.");
 
-    const baseUrl = "https://arkide.arc360hub.com/editor.html?extension=";
+    const baseUrl = "https://studio.arkide.site/editor.html?extension=";
 
     /**
      * The button to copy the URL
