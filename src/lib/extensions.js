@@ -103,6 +103,7 @@ export default [
         code: "sourdoggy/stylus extension.js",
         banner: "sourdoggy/stylus_ext.avif",
         creator: "sourdoggy",
+        isGitHub: true,
     },
     {
         name: "Text To Speech: Redone",
@@ -152,7 +153,7 @@ export default [
         banner: "dumzdev/removebgbanner.svg",
         creator: "dumzdev",
     },
-    {
+    /*{
         name: "PenguinAI",
         description: "Talk to AI! Use Models like DALL-E-3, GPT, LLama, Claude, and more!",
         code: "MubiLop/penguingpt.js",
@@ -163,7 +164,7 @@ export default [
         unstable: true,
         documentation: "PenguinAI",
         unstableReason: "AI models can generate unintended or inappropriate output.\nSome AI models may also become temporarily inaccessible.\n\nUse at your own risk.",
-    },
+    },*/
 /*
     {
         name: "Block AI",
@@ -231,6 +232,15 @@ export default [
         isGitHub: true,
     },
     {
+        name: "Translation Keys",
+        description: "Use translation keys in your projects for multi-language support",
+        code: "Embin/embintranslation.js",
+        banner: "Embin/embintranslation.avif",
+        creator: "NotEmbin",
+        isGitHub: true, 
+        creatorAlias: "Embin",
+    },
+    {
         name: "Yet Another String Extension",
         description: "A small collection of utilty blocks intended to make managing strings much, much easier.",
         code: "DogeisCut/YetAnotherStringExtension.js",
@@ -245,6 +255,14 @@ export default [
         banner: "DogeisCut/dogeiscutSet.svg",
         creator: "DogeisCut",
         isGitHub: true, 
+    },
+    {
+        name: "Blobs",
+        description: "An extension made for handling blobs which can be used to store files. Allows to easily make blobs for the Js extension",
+        code: "Faunks/Blobs.js",
+        banner: "Faunks/Blobs.avif",
+        creator: "Faunks",
+        isGitHub: true,
     },
     {
         name: "Random Utilities",
@@ -337,14 +355,14 @@ export default [
         creator: "LilyMakesThings",
         isGitHub: false,
     },
-    // { // temporary due to licensing issues
-    //     name: "More Fields",
-    //     description: "Custom Field Types",
-    //     code: "Ashime/MoreFields.js",
-    //     banner: "0znzw/MoreFields.avif",
-    //     creator: "yuri-kiss",
-    //     isGitHub: true,
-    // },
+    {
+        name: "More Fields",
+        description: "Custom Field Types",
+        code: "Ashime/MoreFields.js",
+        banner: "0znzw/MoreFields.avif",
+        creator: "yuri-kiss",
+        isGitHub: true,
+    },
     {
         name: "Beepbox Player",
         description: "Play, edit, and read songs from any BeepBox mod directly from the URL or JSON!",
@@ -440,7 +458,7 @@ export default [
     },
     {
         name: "Chess",
-        description: "A powerful extension about Chess. It allows to create a Chessboard, manage chess games, and use Stockfish 17 in your projects.",
+        description: "A powerful extension that lets you manage a chessboard, customize it, use Stockfish 17 (via API), a local chess engine (Lozza) and much, MUCH more!",
         code: "Gen1x/chess-ext.js",
         banner: "Gen1x/chess-ext.avif",
         creator: "G1nX",
