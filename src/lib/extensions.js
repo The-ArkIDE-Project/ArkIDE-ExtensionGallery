@@ -24,6 +24,15 @@ export default [
         notes: ""
     },
     {
+        name: "ArkIDE Console",
+        description: "Add a console to your project to log messages, errors, and warnings.",
+        code: "Ark/arkide-console.js",
+        banner: "Ark/console.svg",
+        creator: "Arc360",
+        creatorAlias: "Ark",
+        notes: ""
+    },
+    {
         name: "Pen+",
         description: "Extended pen section! Adds blocks for drawing triangles using textures and tints, drawing images and editing their pixels, etc.",
         code: "ObviousAlexC/PenPlus.js",
