@@ -33,6 +33,15 @@ export default [
         notes: ""
     },
     {
+        name: "Timer Utils",
+        description: "An extension that helps you count down to certain dates without having to do a bunch of math and coding.",
+        code: "Ark/timerutils.js",
+        banner: "Ark/timerutils.svg",
+        creator: "Arc360",
+        creatorAlias: "Ark",
+        notes: ""
+    },
+    {
         name: "Pen+",
         description: "Extended pen section! Adds blocks for drawing triangles using textures and tints, drawing images and editing their pixels, etc.",
         code: "ObviousAlexC/PenPlus.js",
