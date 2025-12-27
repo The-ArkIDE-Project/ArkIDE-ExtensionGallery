@@ -452,9 +452,9 @@
           ? getComputedStyle(document.documentElement).getPropertyValue(
               "--ui-secondary",
             )
-            ? "#009CCC"
-            : "hsla(194, 100%, 50%, 1)"
-          : "hsla(194, 100%, 50%, 1)",
+            ? "#5500cc"
+            : "rgb(89, 0, 255)"
+          : "rgb(98, 0, 255)",
         color: "#fff",
         fontSize: "16px",
         cursor: "pointer",
@@ -687,7 +687,7 @@
         switch (tabName) {
           case "logs":
             cmdWrap.style.height = "";
-            logsTabButton.style.borderBottom = "2px solid #009CCC";
+            logsTabButton.style.borderBottom = "2px solid #5500cc";
             this.logContentArea.style.display = "block";
             this.pauseButton.style.display = "flex";
             exportButton.style.display = "flex";
@@ -695,18 +695,18 @@
             input.style.visibility = "";
             break;
           case "profiler":
-            profilerTabButton.style.borderBottom = "2px solid #009CCC";
+            profilerTabButton.style.borderBottom = "2px solid #5500cc";
             this.profilerContentArea.style.display = "block";
             this._resizeAllCanvases();
             this._renderAllGraphs();
             break;
           case "threads":
-            threadsTabButton.style.borderBottom = "2px solid #009CCC";
+            threadsTabButton.style.borderBottom = "2px solid #5500cc";
             this.threadContentArea.style.display = "block";
             this._updateThreadViewer();
             break;
           case "variables":
-            runtimeVarsTabButton.style.borderBottom = "2px solid #009CCC";
+            runtimeVarsTabButton.style.borderBottom = "2px solid #5500cc";
             this.variablesContentArea.style.display = "flex";
             this._updateVariablesViewer();
             break;
