@@ -48,7 +48,15 @@ export default [
         banner: "ObviousAlexC/PenPlus.svg",
         creator: "pinksheep2917",
     },
-        {
+    {
+        name: "Shovel Debugger",
+        description: "Shovel's improved and feature rich debugger!",
+        code: "TheShovel/shoveldebugger.js",
+        banner: "TheShovel/thumbnail-shoveldebugger.avif",
+        isGitHub: true,
+        creator: "TheShovel",
+    },
+    {
         name: "MotionSprite",
         description: "An advanced math-based animation system",
         code: "TheShovel/qoan-renderer.js",
@@ -277,7 +285,7 @@ export default [
     },
     {
         name: "Sets",
-        description: "Store non-repeating, unordered, data super efficently in sets.",
+        description: "Store non-repeating, unordered data super efficiently in sets.",
         code: "DogeisCut/dogeiscutSet.js",
         banner: "DogeisCut/dogeiscutSet.svg",
         creator: "DogeisCut",
