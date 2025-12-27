@@ -293,8 +293,8 @@
         background: getComputedStyle(document.documentElement).getPropertyValue(
           "--ui-secondary",
         )
-          ? "#009CCC"
-          : "hsla(194, 100%, 50%, 1)",
+          ? "#5200cc"
+          : "rgb(89, 0, 255)",
         color: "#fff",
         padding: "6px 10px",
         cursor: "move",
@@ -379,8 +379,8 @@
         color: getComputedStyle(document.documentElement).getPropertyValue(
           "--ui-secondary",
         )
-          ? "#009CCC"
-          : "hsla(194, 100%, 50%, 1)",
+          ? "#5200cc"
+          : "rgb(89, 0, 255)",
         padding: "8px",
         fontSize: "16px",
         cursor: "pointer",
