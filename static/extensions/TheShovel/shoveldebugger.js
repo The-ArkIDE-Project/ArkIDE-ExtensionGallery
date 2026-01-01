@@ -16,6 +16,17 @@
     oldStamp.call(this, target);
   };
 
+  const oldStepThread = vm.runtime.sequencer.stepThread;
+  let _threadExecutionTimes = {};
+  vm.runtime.sequencer.stepThread = function (e) {
+    const startTime = performance.now();
+    oldStepThread.call(this, e);
+    const endTime = performance.now();
+    const executionTime = endTime - startTime;
+    const variableName = `thread_${e.topBlock}_executionTime`;
+    _threadExecutionTimes[variableName] = executionTime;
+  };
+
   const oldSetTarget = vm.runtime.setEditingTarget;
   vm.runtime.setEditingTarget = function (editingTarget) {
     if (
@@ -124,6 +135,7 @@
 
         this._maybeSample(t1, smoothedFps, stampsPerFrame);
         stampsPerFrame = 0;
+        this._updateThreadViewer();
       };
 
       if (!this.debuggerWindow) this._createWindow();
@@ -287,6 +299,11 @@
         boxSizing: "border-box",
         boxShadow: "0px 5px 25px 5px hsla(0, 0%, 0%, 0.15)",
       });
+
+      const resizeObserver = new ResizeObserver(() => {
+        this._updateVirtualScroll();
+      });
+      resizeObserver.observe(w);
 
       const header = document.createElement("div");
       Object.assign(header.style, {
@@ -1423,6 +1440,11 @@
                   topBlock = B.getMainWorkspace().blockDB_[thread.topBlock];
                 }
 
+                const executionTimeKey = `thread_${thread.topBlock}_executionTime`;
+                const executionTime =
+                  _threadExecutionTimes[executionTimeKey] || 0;
+                const showExecutionTime = executionTime > 0;
+
                 if (!this.performanceMode) {
                   const messageDiv = document.createElement("div");
                   Object.assign(messageDiv.style, {
@@ -1436,7 +1458,13 @@
                     marginLeft: "15px",
                     cursor: "pointer",
                   });
-                  messageDiv.textContent = `Thread ${index + 1}`;
+
+                  let labelText = `Thread ${index + 1}`;
+                  if (showExecutionTime) {
+                    labelText += ` (${executionTime.toFixed(2)}ms)`;
+                  }
+                  messageDiv.textContent = labelText;
+
                   if (!this.packaged) {
                     messageDiv.addEventListener("click", () => {
                       if (B && B.getMainWorkspace && thread.topBlock) {
@@ -1521,7 +1549,11 @@
                   container.appendChild(wrapper);
 
                   const label = document.createElement("div");
-                  label.textContent = `Thread ${index + 1}`;
+                  let labelText = `Thread ${index + 1}`;
+                  if (showExecutionTime) {
+                    labelText += ` (${executionTime.toFixed(2)}ms)`;
+                  }
+                  label.textContent = labelText;
                   Object.assign(label.style, {
                     position: "absolute",
                     top: "2px",
@@ -1693,7 +1725,12 @@
                     marginLeft: "15px",
                     cursor: "pointer",
                   });
-                  messageDiv.textContent = `Thread ${index + 1}`;
+
+                  let labelText = `Thread ${index + 1}`;
+                  if (showExecutionTime) {
+                    labelText += ` (${executionTime.toFixed(2)}ms)`;
+                  }
+                  messageDiv.textContent = labelText;
 
                   messageDiv.addEventListener("click", () => {
                     if (B && B.getMainWorkspace && thread.topBlock) {
@@ -1832,12 +1869,14 @@ ${logHTML}
       );
       this.logContainer.innerHTML = "";
 
+      let currentTop = startIndex * this.averageEntryHeight;
+
       for (let i = startIndex; i < endIndex; i++) {
         const entry = this.logEntries[i];
         const div = document.createElement("div");
         Object.assign(div.style, {
           position: "absolute",
-          top: `${i * this.averageEntryHeight}px`,
+          top: `${currentTop}px`,
           left: "6px",
           right: "6px",
           whiteSpace: "pre-wrap",
@@ -1848,6 +1887,11 @@ ${logHTML}
         div.innerHTML = this._formatLogItem(entry.text);
 
         this.logContainer.appendChild(div);
+
+        div.style.width = "calc(100% - 12px)";
+        const rect = div.getBoundingClientRect();
+        const height = rect.height || this.averageEntryHeight;
+        currentTop += height;
       }
     }
 
