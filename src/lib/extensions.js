@@ -343,11 +343,11 @@ export default [
         isGitHub: false, 
     },
     {
-        name: "Pang API",
-        description: "Fetch information from the PenguinMod API.",
+        name: "ArkIDE API",
+        description: "Fetch information from the ArkIDE API.",
         code: "SammerLOL/pangapi.js",
         banner: "SammerLOL/pangapi.avif",
-        creator: "oc9x97",
+        creator: "oc9x97 (Updated by Ark for ArkIDE)",
         isGitHub: true,
     },
     {

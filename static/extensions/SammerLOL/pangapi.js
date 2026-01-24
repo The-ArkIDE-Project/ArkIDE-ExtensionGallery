@@ -8,11 +8,11 @@
 
 (function (Scratch) {
   "use strict";
-  if (!Scratch.extensions.unsandboxed) throw new Error("Pang API must run unsandboxed");
+  if (!Scratch.extensions.unsandboxed) throw new Error("ArkIDE API must run unsandboxed");
 
   const Cast = Scratch.Cast;
 
-  const apiURL = "https://projects.penguinmod.com/api/v1/";
+  const apiURL = "https://arkideapi.arc360hub.com/api/v1/";
 
   /*
     prevent server spam by using a cache system,
@@ -24,8 +24,8 @@
     getInfo() {
       return {
         id: "sammerpenguinapi",
-        name: "Pang API",
-        color1: "#00b3ff",
+        name: "ArkIDE API",
+        color1: "#6600ff",
         blocks: [
           { blockType: Scratch.BlockType.LABEL, text: "Profiles" },
           {
