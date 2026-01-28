@@ -5,7 +5,7 @@
     let currentMode = 'server';
     let lastResponse = 'Ready';
 
-    const iconDataURI = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiM0YTkwZTIiLz48cGF0aCBkPSJNMTYgMjBoMzJ2NGgtMzJ6TTIwIDI4aDI0djRoLTI0ek0yMCAzNmgyNHY0aC0yNHoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=";
+    const iconDataURI = "data:image/svg+xml,%3Csvg%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23594ae2%22%2F%3E%3Cpath%20d%3D%22M16%2020h32v4h-32zM20%2028h24v4h-24zM20%2036h24v4h-24z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E";
 
     const DB_NAME = 'arkide_storage';
     const STORE_NAME = 'data_store';
@@ -68,8 +68,8 @@
             return {
                 id: 'arkideStorage',
                 name: 'Store My Stuff',
-                color1: '#4a90e2',
-                color2: '#357abd',
+                color1: '#594ae2',
+                color2: '#3545bd',
                 menuIconURI: iconDataURI,
                 blocks: [
                     {
