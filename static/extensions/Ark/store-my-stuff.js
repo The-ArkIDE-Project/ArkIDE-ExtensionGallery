@@ -304,7 +304,7 @@
                     lockMenu: {
                         acceptReporters: false,
                         items: [
-                            { text: 'unlocked', value: '' },
+                            { text: 'unlocked', value: 'unlocked' },
                             { text: 'locked', value: 'locked' }
                         ]
                     }
@@ -369,42 +369,46 @@ Storage modes:
             }
         }
 
-        async _getStorageData(key) {
-            if (currentMode === 'server') {
+        async _getStorageData(key, mode = null) {
+            const useMode = mode || currentMode; // Use passed mode or current
+            
+            if (useMode === 'server') {
                 return await this._serverRequest(`/get/${encodeURIComponent(key)}`);
-            } else if (currentMode === 'local') {
+            } else if (useMode === 'local') {
                 const data = localStorage.getItem(`arkide_${key}`);
                 return data ? JSON.parse(data) : null;
-            } else if (currentMode === 'indexeddb') {
+            } else if (useMode === 'indexeddb') {
                 return await idbGet(key);
             }
             return null;
         }
-
-        async _setStorageData(key, value, locked = false) {
+        async _setStorageData(key, value, locked = false, mode = null) {
+            const useMode = mode || currentMode;
             const data = { value: value, locked: locked };
             
-            if (currentMode === 'server') {
+            if (useMode === 'server') {
                 return await this._serverRequest('/set', 'POST', { key, value, locked });
-            } else if (currentMode === 'local') {
+            } else if (useMode === 'local') {
                 localStorage.setItem(`arkide_${key}`, JSON.stringify(data));
                 lastResponse = 'Saved to local storage';
                 return { success: true };
-            } else if (currentMode === 'indexeddb') {
+            } else if (useMode === 'indexeddb') {
                 await idbSet(key, data);
                 lastResponse = 'Saved to IndexedDB';
                 return { success: true };
             }
         }
 
-        async _deleteStorageData(key) {
-            if (currentMode === 'server') {
+        async _deleteStorageData(key, mode = null) {
+            const useMode = mode || currentMode;
+            
+            if (useMode === 'server') {
                 return await this._serverRequest(`/delete/${encodeURIComponent(key)}`, 'DELETE');
-            } else if (currentMode === 'local') {
+            } else if (useMode === 'local') {
                 localStorage.removeItem(`arkide_${key}`);
                 lastResponse = 'Deleted from local storage';
                 return { success: true };
-            } else if (currentMode === 'indexeddb') {
+            } else if (useMode === 'indexeddb') {
                 await idbDelete(key);
                 lastResponse = 'Deleted from IndexedDB';
                 return { success: true };
@@ -413,16 +417,24 @@ Storage modes:
 
         async setValue({ KEY, VALUE, LOCK }) {
             const locked = LOCK === 'locked';
-            await this._setStorageData(KEY, VALUE, locked);
+            const mode = currentMode; // Capture mode at start
+            
+            if (mode === 'server') {
+                await this._serverRequest('/set', 'POST', { key: KEY, value: VALUE, locked });
+            } else {
+                await this._setStorageData(KEY, VALUE, locked);
+            }
         }
 
         async getValue({ KEY }) {
+            const mode = currentMode; // Capture mode at start
             const data = await this._getStorageData(KEY);
             if (!data) return '';
             return data.value !== undefined ? data.value : data;
         }
 
         async deleteKey({ KEY }) {
+            const mode = currentMode; // Capture mode at start
             await this._deleteStorageData(KEY);
         }
 
