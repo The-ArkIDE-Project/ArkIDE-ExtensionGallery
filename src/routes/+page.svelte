@@ -239,35 +239,33 @@
         or click the "View" button to create a new project with the extension.
     </p>
 
-    <div class="extension-list">
+<div class="extension-list">
         <!-- This list can be modified in "src/lib/extensions.js" -->
-        {#each extensions as extension}
-            {#if searchable(extension.name).includes(stateSearchBar.query)}
-                <Extension
-                    name={extension.name}
-                    image={`/images/${extension.banner}`}
-                    tags={extension.tags}
-                    creator={extension.creator}
-                    creatorAlias={extension.creatorAlias}
-                    url={createExtUrl(extension.code)}
-                    relUrl={extension.code}
-                    notes={extension.notes}
-                    example={extension.example}
-                    documentation={extension.documentation}
-                    isGitHub={String(extension.isGitHub) === "true"}
-                    unstable={String(extension.unstable) === "true"}
-                    unstableReason={extension.unstableReason}
+{#each shownExtensions as extension}
+    <Extension
+        name={extension.name}
+        image={`/images/${extension.banner}`}
+        tags={extension.tags}
+        creator={extension.creator}
+        creatorAlias={extension.creatorAlias}
+        url={createExtUrl(extension.code)}
+        relUrl={extension.code}
+        notes={extension.notes}
+        example={extension.example}
+        documentation={extension.documentation}
+        isGitHub={String(extension.isGitHub) === "true"}
+        unstable={String(extension.unstable) === "true"}
+        unstableReason={extension.unstableReason}
 
-                    bind:favorited={favoritedExtensions[extension.code]}
-                    onfavoriteclicked={onFavoriteClicked}
-                    showTestAlways={showingTestInNewProject}
-                >
-                    {extension.description}
-                </Extension>
-            {:else}
-                <p class="no-exts">No extensions match your selected filters.</p>
-            {/each}
-        </div>
+        bind:favorited={favoritedExtensions[extension.code]}
+        onfavoriteclicked={onFavoriteClicked}
+        showTestAlways={showingTestInNewProject}
+    >
+        {extension.description}
+    </Extension>
+{:else}
+    <p class="no-exts">No extensions match your selected filters.</p>
+{/each}
     </div>
 </div>
 
