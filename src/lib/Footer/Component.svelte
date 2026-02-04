@@ -71,6 +71,7 @@
 
     .links {
         width: 100%;
+        
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -78,9 +79,10 @@
     }
     .footer {
         width: 100%;
+        margin-bottom: 4px;
+
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 4px;
     }
 </style>
