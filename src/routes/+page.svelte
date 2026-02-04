@@ -227,52 +227,156 @@
 <div class="top">
     <div class="header">
         <Logo />
-        <h1>ArkIDE Extra Extensions</h1>
+        <h1>PenguinMod Extra Extensions</h1>
     </div>
 </div>
-<div class="main">
-    <p>See some cool extensions made by other people here. Original website made by penguinmod, Edited for use in ArkIDE.</p>
-    <p>
-        To use some of these extensions in your projects, click the "Copy URL"
-        button on an extension and
-        <a href="/load" target="_blank">load it into ArkIDE,</a>
-        or click the "View" button to create a new project with the extension.
-    </p>
+<div class="buffer">
+    <p>See some cool extensions made by other people here.</p>
+    {#if stateApplication.fromEditor}
+        <p>
+            To add an extension to your project, click the "Add to Project" button.
+            You can also click the "Copy" button and
+            <a href="/load" target="_blank">load it into ArkIDE</a>
+            if the former fails.
+        </p>
+    {:else}
+        <p>
+            To use some of these extensions in your projects, click the "Copy Link"
+            button on an extension and
+            <a href="/load" target="_blank">load it into ArkIDE,</a>
+            or click the "Try it out" button to create a new project with the extension.
+        </p>
+    {/if}
+</div>
 
-<div class="extension-list">
-        <!-- This list can be modified in "src/lib/extensions.js" -->
-{#each shownExtensions as extension}
-    <Extension
-        name={extension.name}
-        image={`/images/${extension.banner}`}
-        tags={extension.tags}
-        creator={extension.creator}
-        creatorAlias={extension.creatorAlias}
-        url={createExtUrl(extension.code)}
-        relUrl={extension.code}
-        notes={extension.notes}
-        example={extension.example}
-        documentation={extension.documentation}
-        isGitHub={String(extension.isGitHub) === "true"}
-        unstable={String(extension.unstable) === "true"}
-        unstableReason={extension.unstableReason}
+<div class="extension-list-controls">
+    <button onclick={toggleFilterBar}>
+        <img
+            src="/icons/filter.svg"
+            alt="Filters"
+            title="Filters"
+        />
+    </button>
+    <div class="extension-list-controls-sorting-selector-image-container-div">
+        <img
+            src="/icons/sort.svg"
+            alt="Sort"
+            title="Sort using the selector"
+        />
+    </div>
+    <label>
+        <select title="Sort" bind:value={selectedSorting} onchange={updateExtensionList}>
+            <option value="none">Recommended order</option>
+            <option value="reversed">Reversed recommended order</option>
+            <option value="namedesc">Names from A-Z</option>
+            <option value="nameasce">Names from Z-A</option>
+            <option value="creatordesc">Creators from A-Z</option>
+            <option value="creatorasce">Creators from Z-A</option>
+        </select>
+    </label>
+    {#if stateApplication.fromEditor}
+        <button onclick={toggleTestInNewProject}>
+            {#if showingTestInNewProject}
+                <img
+                    src="/icons/test-enabled.svg"
+                    alt={'Currently showing "Test in New Project" link'}
+                    title={'Currently showing "Test in New Project" link'}
+                />
+            {:else}
+                <img
+                    src="/icons/test-disabled.svg"
+                    alt={'Currently hiding "Test in New Project" link'}
+                    title={'Currently hiding "Test in New Project" link'}
+                />
+            {/if}
+        </button>
+    {/if}
+</div>
+<div class="extension-list-container" data-filteropen={filterBarOpened}>
+    <div class="extension-list-bars" data-filteropen={filterBarOpened}>
+        <div class="extension-list-filters" data-filteropen={filterBarOpened}>
+            <h1>Filters</h1>
+            
+            <h2 style="margin-block-end:4px">Tags</h2>
+            {#each tagsListShown as extensionTag}
+                {#if extensionTag.name === "separator"}
+                    <hr />
+                {:else}
+                    <label>
+                        <Checkbox onchange={updateExtensionList} bind:checked={tagsSelected[extensionTag.name]} />
+                        {extensionTag.alias}
+                    </label>
+                {/if}
+            {:else} <!-- no tags -->
+                <p>No tags currently exist.</p>
+            {/each}
+            <button class="extension-list-filters-clear" onclick={clearTags}>
+                Clear selected tags
+            </button>
 
-        bind:favorited={favoritedExtensions[extension.code]}
-        onfavoriteclicked={onFavoriteClicked}
-        showTestAlways={showingTestInNewProject}
-    >
-        {extension.description}
-    </Extension>
-{:else}
-    <p class="no-exts">No extensions match your selected filters.</p>
-{/each}
+            <h2 style="margin-block-end:4px">Features</h2>
+            <label>
+                <ThreeStateCheckbox onchange={updateExtensionList} bind:value={featuresSelected.documentation} />
+                Extensions with documentation
+            </label>
+            <label>
+                <ThreeStateCheckbox onchange={updateExtensionList} bind:value={featuresSelected.exampleprojects} />
+                Extensions with example projects
+            </label>
+            <label>
+                <ThreeStateCheckbox onchange={updateExtensionList} bind:value={featuresSelected.warnings} />
+                Extensions with warnings
+            </label>
+            <label>
+                <ThreeStateCheckbox onchange={updateExtensionList} bind:value={featuresSelected.favorites} />
+                Favorited extensions
+            </label>
+            <br>
+            <label>
+                <Checkbox onchange={updateExtensionList} bind:checked={featuresSelected.favoritessplit} />
+                Separate favorited extensions
+            </label>
+
+            <!-- put some padding -->
+            <br>
+        </div>
+        <div class="extension-list" data-filteropen={filterBarOpened}>
+            <!-- This list can be modified in "src/lib/extensions.js" -->
+            {#each shownExtensions as extension}
+                <Extension
+                    name={extension.name}
+                    image={`/images/${extension.banner}`}
+                    tags={extension.tags}
+                    creator={extension.creator}
+                    creatorAlias={extension.creatorAlias}
+                    url={createExtUrl(extension.code)}
+                    relUrl={extension.code}
+                    notes={extension.notes}
+                    example={extension.example}
+                    documentation={extension.documentation}
+                    isGitHub={String(extension.isGitHub) === "true"}
+                    unstable={String(extension.unstable) === "true"}
+                    unstableReason={extension.unstableReason}
+
+                    bind:favorited={favoritedExtensions[extension.code]}
+                    onfavoriteclicked={onFavoriteClicked}
+                    showTestAlways={showingTestInNewProject}
+                >
+                    {extension.description}
+                </Extension>
+            {:else}
+                <p class="no-exts">No extensions match your selected filters.</p>
+            {/each}
+        </div>
     </div>
 </div>
 
 <div class="buffer">
     <p style="text-align: center;">
         Note: Some extensions may be added to the Extension Gallery in
-        ArkIDE Studio.<br />If you cannot find an extension that was
+        ArkIDE Studio.
+        <br />
+        If you cannot find an extension that was
         previously listed here, check there.
     </p>
 
