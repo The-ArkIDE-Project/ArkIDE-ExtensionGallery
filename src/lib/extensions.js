@@ -9,7 +9,7 @@ export default [
         name: "ArkIDE additions",
         description: "A simple extension that adds some cool new blocks for ArkIDE.",
         code: "Ark/arkide-additons.js",
-        banner: "Ark/banner.svg",
+        banner: "Ark/banner.png",
         creator: "Arc360",
         creatorAlias: "Ark",
         notes: ""
@@ -18,7 +18,7 @@ export default [
         name: "Json Number Array Operations",
         description: "A nice extension that adds useful operation blocks for Json Number Arrays.",
         code: "Ark/jsonnumberarray.js",
-        banner: "Ark/jsonant.svg",
+        banner: "Ark/jsonant.png",
         creator: "Arc360",
         creatorAlias: "Ark",
         notes: ""
@@ -27,7 +27,7 @@ export default [
         name: "ArkIDE Console",
         description: "Add a console to your project to log messages, errors, and warnings.",
         code: "Ark/arkide-console.js",
-        banner: "Ark/console.svg",
+        banner: "Ark/console.png",
         creator: "Arc360",
         creatorAlias: "Ark",
         notes: ""
@@ -40,6 +40,15 @@ export default [
         creator: "Arc360",
         creatorAlias: "Ark",
         notes: ""
+    },
+    {
+        name: "Store My Stuff",
+        description: "Another varible storage extension but the server is running on the centeral ArkIDE server instead.",
+        code: "Ark/store-my-stuff.js",
+        banner: "Ark/storemystuff.png",
+        creator: "Arc360",
+        creatorAlias: "Ark",
+        notes: "Server uptime may not be perfect"
     },
     {
         name: "Pen+",
