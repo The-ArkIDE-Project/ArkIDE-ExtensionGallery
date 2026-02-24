@@ -7319,7 +7319,7 @@
   // default: https://raw.githubusercontent.com/TheShovel/block-ai/refs/heads/main/
   // dev: http://localhost:8000/
   const assetsPath =
-    "https://raw.githubusercontent.com/arc360alt/extensions-for-arkide/refs/heads/main/";
+    "https://extras.arkide.site/";
 
   let intermingledResponseText;
 
