@@ -20,13 +20,13 @@
   var modName;
   if (isPM) {
     //This is because Ian from PenguinMod laughed at me for having pang in Turbowarp >:(
-    modName = "PenguinMod";
-    aiName = "Block AI";
+    modName = "ArkIDE";
+    aiName = "Keith AI";
     //This is just so it makes the flag match the flag color of penguinmod. looks nice :)
-    greenFlagColor = "#008aff";
+    greenFlagColor = "#2b00ff";
   } else {
     modName = "TurboWarp";
-    aiName = "Block AI";
+    aiName = "Keith AI";
     greenFlagColor = "#4abe55";
   }
 
@@ -7307,7 +7307,7 @@
   */
   const defaultApiKey = atob(
     atob(
-      "UVVsNllWTjVSREpDTkRaNWIycFpRakpCVVhwcmRFcE9VamRxZWtsSVVuSnhRVWxUUnpsQg==",
+      "",
     ),
   );
 
@@ -7319,7 +7319,7 @@
   // default: https://raw.githubusercontent.com/TheShovel/block-ai/refs/heads/main/
   // dev: http://localhost:8000/
   const assetsPath =
-    "https://raw.githubusercontent.com/TheShovel/block-ai/refs/heads/main/";
+    "https://raw.githubusercontent.com/arc360alt/extensions-for-arkide/refs/heads/main/";
 
   let intermingledResponseText;
 
@@ -7350,8 +7350,8 @@
   function setDefaultSettings() {
     apiKey = defaultApiKey;
     selectedStyle = "scratch3";
-    buddyStyle = "full-color";
-    maxHistoryLength = 10;
+    buddyStyle = "keith";
+    maxHistoryLength = 10;z
     //using the first model in testedModels by default
     geminiVersion = testedModels[0];
   }
@@ -7444,7 +7444,7 @@
   `;
   var accentColorCSS;
   if (isPM) {
-    accentColorCSS = "background-color: rgb(0 195 255 / 73%);";
+    accentColorCSS = "background-color: rgb(98 0 255 / 73%);";
   } else {
     accentColorCSS = "background-color: var(--menu-bar-background);";
   }
@@ -7623,7 +7623,7 @@
     mainWindow.appendChild(responseArea);
     let settingsButton = document.createElement("button");
     settingsButton.title = "Settings";
-    settingsButton.textContent = "@";
+    settingsButton.textContent = "⚙️";
     settingsButton.style.cssText = `
         bottom: 99999px;
         border-color: transparent;
@@ -7786,6 +7786,7 @@
       background-image: url(${assetsPath}Images/Expressions/${buddyStyle}/idle.png);
       background-size: contain;
       background-repeat: no-repeat;
+      margin-bottom: 10px;
     `;
     mainWindow.appendChild(buddyBox);
     buddyBox.addEventListener("mouseover", () => {
@@ -7801,7 +7802,7 @@
     const dragCorner = document.createElement("div");
     let cornerAccent;
     if (isPM) {
-      cornerAccent = "rgb(0 195 255 / 73%);";
+      cornerAccent = "rgb(98 0 255 / 73%);";
     } else {
       cornerAccent = "var(--menu-bar-background);";
     }
@@ -8093,6 +8094,7 @@
       "full-color",
       "white-outline",
       "black-outline",
+      "keith",
       "disabled",
     ];
     buddyStylesList.forEach((style) => {
@@ -8104,6 +8106,11 @@
     buddyStyleSelect.value = buddyStyle;
     settingsWindow.appendChild(buddyStyleSelect);
     makeDivider();
+
+    let a = document.createElement("label");
+    a.textContent = "All credits for the extension go to TheShovel on GitHub, I am only updating this a bit becuase it seems like a cool extension.";
+    a.style.cssText = basicLabelStyle;
+    settingsWindow.appendChild(a);
 
     if (shiftPressed) {
       let testModelsButton = document.createElement("button");
@@ -8805,7 +8812,7 @@
     getInfo() {
       return {
         id: "pangpalgemini",
-        name: "Block AI",
+        name: "Keith AI",
         menuIconURI: icon,
         blocks: [],
       };

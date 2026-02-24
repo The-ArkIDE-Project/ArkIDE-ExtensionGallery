@@ -227,7 +227,7 @@
 <div class="top">
     <div class="header">
         <Logo />
-        <h1>PenguinMod Extra Extensions</h1>
+        <h1>ArkIDE Extra Extensions</h1>
     </div>
 </div>
 <div class="buffer">

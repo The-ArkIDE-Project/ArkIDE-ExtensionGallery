@@ -231,10 +231,9 @@ export default [
         documentation: "PenguinAI",
         unstableReason: "AI models can generate unintended or inappropriate output.\nSome AI models may also become temporarily inaccessible.\n\nUse at your own risk.",
     },*/
-/*
     {
         name: "Block AI",
-        description: "An AI powered chat bot to help you code in your projects.",
+        description: "An AI powered chat bot to help you code in your projects. (You need your own API Key)",
         code: "TheShovel/blockAI.js",
         banner: "TheShovel/thumbnail-blockAI.avif",
         creator: "TheShovel",
@@ -243,7 +242,6 @@ export default [
         unstable: true,
         unstableReason: "The AI model can generate inaccurate output and broken syntax!",
     },
-*/
     {
         name: "PenguinHook",
         description: "Send Webhook requests, that can be Discord or any type of webhook.",
