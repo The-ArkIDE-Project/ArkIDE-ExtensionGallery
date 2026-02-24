@@ -233,7 +233,7 @@
         {/if}
         {#if example}
             <p>
-                <a href={`https://studio.penguinmod.com/editor.html?project_url=${encodeURIComponent(`${$page.url.origin}/examples/projects/${example}`)}`}>
+                <a href={`https://studio.arkide.site/editor.html?project_url=${encodeURIComponent(`${$page.url.origin}/examples/projects/${example}`)}`}>
                     Example Project
                 </a>
             </p>
