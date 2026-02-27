@@ -388,19 +388,20 @@
         position: relative;
         width: calc(600px / 1.85);
         height: calc(300px / 1.85);
+        margin-bottom: 40px; 
 
         border-radius: 4px;
     }
     .image {
         width: 100%;
-        height: 100%;
+        height: 120%;
 
         object-fit: cover;
     }
     .image-copy {
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: 120%;
         border: 0;
         margin: 0;
         padding: 0;

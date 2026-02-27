@@ -270,10 +270,20 @@
             text: "Set text of button [id] to [text]",
             arguments: {id: {type: Scratch.ArgumentType.STRING, defaultValue: "My element"}, text: {type: Scratch.ArgumentType.STRING, defaultValue: "Hello world!"}},
             blockIconURI: buttonicon
+            },{
+            opcode: "DropdownSetOptions",
+            text: "Set options of dropdown [id] to [options]",
+            arguments: {id: {type: Scratch.ArgumentType.STRING, defaultValue: "My element"}, options: {type: Scratch.ArgumentType.STRING, defaultValue: '["Option 1","Option 2","Option 3"]'}},
+            blockIconURI: inputIcon
+            },{
+            opcode: "DropdownSetValue",
+            text: "Set selected option of dropdown [id] to [value]",
+            arguments: {id: {type: Scratch.ArgumentType.STRING, defaultValue: "My element"}, value: {type: Scratch.ArgumentType.STRING, defaultValue: "Option 1"}},
+            blockIconURI: inputIcon
             }
         ],
         menus: {ElementType: {acceptReporters: false,items: ["Label", "Image", "Video", "Input", "Box", "Button"]},
-            Inputs: {acceptReporters: false,items: ["Text", "Text Area", "Number", "Color", "Checkbox", "File", "Email", "Range", "Image"]},
+            Inputs: {acceptReporters: false,items: ["Text", "Text Area", "Number", "Color", "Checkbox", "File", "Email", "Range", "Image", "Dropdown"]},
             Cursors: {acceptReporters: false,items: ["default", "pointer", "text", "wait", "move", "not-allowed", "crosshair","help", "progress", "grab", "grabbing"]},
             Fonts: {acceptReporters: true, items: fonts},
             Attributes: {acceptReporters: false, items: ['X', "Y", "Direction", "Width", "Height", "Cursor", "Source"]},
@@ -493,6 +503,8 @@
         if(args.input === 'Text Area'){
             elements[args.id] = replaceElement(elements[args.id], document.createElement('textarea'), args.id)
             elements[args.id].style.resize = 'none'
+        }else if(args.input === 'Dropdown'){
+            elements[args.id] = replaceElement(elements[args.id], document.createElement('select'), args.id)
         }else{
             if(elements[args.id].tagName == "TEXTAREA") elements[args.id] = replaceElement(elements[args.id], document.createElement('input'), args.id)
             elements[args.id].type = args.input
@@ -516,13 +528,13 @@
     async InputValue(args){
         if(!elements[args.id] && inputhold[args.id]) return inputhold[args.id]
         const element = elements[args.id]
-        if((!element) || (element.tagName != "INPUT" && element.tagName != "TEXTAREA")) return ""
+        if((!element) || (element.tagName != "INPUT" && element.tagName != "TEXTAREA" && element.tagName != "SELECT")) return ""
         if(!element && inputhold[args.id]) return inputhold[args.id]
         if(element.type === 'checkbox') return element.checked
         return (element.type === 'file' ? await datauri(element.files[0]) : element.value)
     }
     WhenInputChanged(args, util){
-        if(!elements[args.id] || (elements[args.id].tagName!="INPUT"&&elements[args.id].tagName!="TEXTAREA")) return false
+        if(!elements[args.id] || (elements[args.id].tagName!="INPUT"&&elements[args.id].tagName!="TEXTAREA"&&elements[args.id].tagName!="SELECT")) return false
         const element = elements[args.id]
         const value = element.type==='checkbox'?element.checked:element.value
         const blockId = util.thread.peekStack()
@@ -598,6 +610,29 @@
         if(!element || element.tagName != "BUTTON") return
         document.querySelector(`.LordCatInterfaces button[data-id="${args.id}"] span`).textContent = args.text
         this.FixPos(args.id)
+    }
+    DropdownSetOptions(args){
+        const element = elements[args.id]
+        if(!element || element.tagName != "SELECT") return
+        let options
+        try { options = JSON.parse(args.options) } catch(e) { return }
+        if(!Array.isArray(options)) return
+        const currentValue = element.value
+        element.innerHTML = ''
+        options.forEach(opt => {
+            const option = document.createElement('option')
+            option.value = String(opt)
+            option.textContent = String(opt)
+            element.append(option)
+        })
+        // restore previously selected value if it still exists
+        element.value = currentValue
+        this.FixPos(args.id)
+    }
+    DropdownSetValue(args){
+        const element = elements[args.id]
+        if(!element || element.tagName != "SELECT") return
+        element.value = args.value
     }
     }
     Scratch.extensions.register(new lordcatprojectinterfaces())

@@ -48,7 +48,15 @@ export default [
         banner: "Ark/storemystuff.png",
         creator: "Arc360",
         creatorAlias: "Ark",
-        notes: "Server uptime may not be perfect"
+        unstableReason: "Server uptime may not be perfect"
+    },
+    {
+        name: "Comments",
+        description: "Adds comment blocks to your project.",
+        code: "Ark/comments.js",
+        banner: "Ark/comments.png",
+        creator: "Arc360",
+        creatorAlias: "Ark",
     },
     {
         name: "Pen+",
