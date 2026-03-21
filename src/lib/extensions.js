@@ -58,6 +58,7 @@ export default [
         creator: "Arc360",
         creatorAlias: "Ark",
     },
+    /*
     {
         name: "Advanced Keyboard",
         description: "Upgraded keyboard input: key combos (2–5 keys), long press detection, WASD direction, key counters, HAT events with edge trigger, and last key tracking..",
@@ -98,6 +99,7 @@ export default [
         creator: "Askyy",
         creatorAlias: "Askyy",
     },
+    */
     {
         name: "Pen+",
         description: "Extended pen section! Adds blocks for drawing triangles using textures and tints, drawing images and editing their pixels, etc.",
