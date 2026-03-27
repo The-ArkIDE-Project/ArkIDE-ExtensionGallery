@@ -5,31 +5,68 @@
         throw new Error('Fullscreen Detector must run unsandboxed');
     }
 
-    let _isFullscreen = !!document.fullscreenElement;
-    let _lastFullscreen = _isFullscreen;
+    function _getCanvas() {
+        return Scratch.vm.runtime.renderer && Scratch.vm.runtime.renderer.canvas
+            ? Scratch.vm.runtime.renderer.canvas
+            : null;
+    }
+
+    function _isStageFullscreen() {
+        const canvas = _getCanvas();
+        if (!canvas) return false;
+        let el = canvas.parentElement;
+        while (el) {
+            const cls = el.className || '';
+            if (
+                cls.includes('stage-wrapper_stage-wrapper_') ||
+                cls.includes('stage_full-screen') ||
+                cls.includes('fullscreen') ||
+                el.dataset.isFullscreen === 'true'
+            ) {
+                if (
+                    cls.includes('full-screen') ||
+                    cls.includes('fullscreen') ||
+                    cls.includes('isFullScreen') ||
+                    el.dataset.isFullscreen === 'true'
+                ) {
+                    return true;
+                }
+            }
+            el = el.parentElement;
+        }
+        const doc = canvas.ownerDocument || document;
+        const stageWrappers = doc.querySelectorAll('[class*="stage-wrapper"]');
+        for (const wrapper of stageWrappers) {
+            const cls = wrapper.className || '';
+            if (cls.includes('full-screen') || cls.includes('fullscreen') || cls.includes('isFullScreen')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    let _isFullscreen = false;
     let _enterCount = 0;
     let _exitCount = 0;
-    let _lastChangedAt = null;
     let _enteredAt = null;
     let _exitedAt = null;
+    let _lastChangedAt = null;
     let _totalFullscreenMs = 0;
-    let _fsStart = _isFullscreen ? Date.now() : null;
+    let _fsStart = null;
     let _pendingEnter = false;
     let _pendingExit = false;
 
-    function _updateState(nowFull) {
-        const prev = _isFullscreen;
-        _isFullscreen = nowFull;
+    function _poll() {
+        const now = _isStageFullscreen();
+        if (now === _isFullscreen) return;
+        _isFullscreen = now;
         _lastChangedAt = Date.now();
-
-        if (nowFull && !prev) {
+        if (now) {
             _enterCount++;
             _enteredAt = Date.now();
             _fsStart = Date.now();
             _pendingEnter = true;
-        }
-
-        if (!nowFull && prev) {
+        } else {
             _exitCount++;
             _exitedAt = Date.now();
             if (_fsStart !== null) {
@@ -40,27 +77,14 @@
         }
     }
 
-    document.addEventListener('fullscreenchange', () => {
-        _updateState(!!document.fullscreenElement);
-    });
-
-    document.addEventListener('webkitfullscreenchange', () => {
-        _updateState(!!(document.fullscreenElement || document.webkitFullscreenElement));
-    });
-
-    document.addEventListener('mozfullscreenchange', () => {
-        _updateState(!!(document.fullscreenElement || document.mozFullScreenElement));
-    });
-
-    document.addEventListener('msfullscreenchange', () => {
-        _updateState(!!(document.fullscreenElement || document.msFullscreenElement));
-    });
+    const _observer = new MutationObserver(_poll);
+    _observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'data-is-fullscreen'] });
 
     Scratch.vm.runtime.on('BEFORE_EXECUTE', () => {
+        _poll();
         Scratch.vm.runtime.startHats('fullscreenDetector_whenEnterFullscreen');
         Scratch.vm.runtime.startHats('fullscreenDetector_whenExitFullscreen');
         Scratch.vm.runtime.startHats('fullscreenDetector_whenFullscreenChanges');
-        _lastFullscreen = _isFullscreen;
         _pendingEnter = false;
         _pendingExit = false;
     });
@@ -98,26 +122,32 @@
                     {
                         opcode: 'fullscreenState',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen state',
-                        disableMonitor: false
+                        text: 'fullscreen state'
                     },
                     {
                         opcode: 'fullscreenStateNumber',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen as number',
-                        disableMonitor: false
+                        text: 'fullscreen as number'
                     },
                     {
                         opcode: 'fullscreenStateEmoji',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen as emoji',
-                        disableMonitor: false
+                        text: 'fullscreen as emoji'
                     },
                     {
                         opcode: 'fullscreenStateWord',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen word',
-                        disableMonitor: false
+                        text: 'fullscreen as yes or no'
+                    },
+                    {
+                        opcode: 'fullscreenStateOnOff',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'fullscreen as on or off'
+                    },
+                    {
+                        opcode: 'fullscreenStateBinary',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'fullscreen as true or false'
                     },
                     {
                         blockType: Scratch.BlockType.LABEL,
@@ -143,37 +173,37 @@
                     },
                     {
                         blockType: Scratch.BlockType.LABEL,
-                        text: 'Counts & Tracking'
+                        text: 'Counts and Timing'
                     },
                     {
                         opcode: 'enterCount',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'times entered fullscreen',
-                        disableMonitor: false
+                        text: 'times entered fullscreen'
                     },
                     {
                         opcode: 'exitCount',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'times exited fullscreen',
-                        disableMonitor: false
+                        text: 'times exited fullscreen'
                     },
                     {
                         opcode: 'totalChanges',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'total fullscreen changes',
-                        disableMonitor: false
+                        text: 'total fullscreen changes'
                     },
                     {
                         opcode: 'totalFullscreenSeconds',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'total seconds in fullscreen',
-                        disableMonitor: false
+                        text: 'total seconds in fullscreen'
                     },
                     {
                         opcode: 'totalFullscreenMs',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'total milliseconds in fullscreen',
-                        disableMonitor: false
+                        text: 'total milliseconds in fullscreen'
+                    },
+                    {
+                        opcode: 'secondsSinceLastChange',
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: 'seconds since last fullscreen change'
                     },
                     {
                         blockType: Scratch.BlockType.LABEL,
@@ -182,66 +212,21 @@
                     {
                         opcode: 'lastChangedTimestamp',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'last fullscreen change timestamp (ms)',
-                        disableMonitor: false
+                        text: 'last change timestamp (ms)'
                     },
                     {
                         opcode: 'lastEnteredTimestamp',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'last entered fullscreen at (ms)',
-                        disableMonitor: false
+                        text: 'last entered fullscreen timestamp (ms)'
                     },
                     {
                         opcode: 'lastExitedTimestamp',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'last exited fullscreen at (ms)',
-                        disableMonitor: false
-                    },
-                    {
-                        opcode: 'secondsSinceLastChange',
-                        blockType: Scratch.BlockType.REPORTER,
-                        text: 'seconds since last fullscreen change',
-                        disableMonitor: false
-                    },
-                    {
-                        blockType: Scratch.BlockType.LABEL,
-                        text: 'Element Info'
-                    },
-                    {
-                        opcode: 'fullscreenElementTag',
-                        blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen element tag name',
-                        disableMonitor: false
-                    },
-                    {
-                        opcode: 'fullscreenElementId',
-                        blockType: Scratch.BlockType.REPORTER,
-                        text: 'fullscreen element id',
-                        disableMonitor: false
-                    },
-                    {
-                        opcode: 'hasFullscreenElement',
-                        blockType: Scratch.BlockType.BOOLEAN,
-                        text: 'fullscreen element exists?'
+                        text: 'last exited fullscreen timestamp (ms)'
                     },
                     {
                         blockType: Scratch.BlockType.LABEL,
                         text: 'Actions'
-                    },
-                    {
-                        opcode: 'requestFullscreen',
-                        blockType: Scratch.BlockType.COMMAND,
-                        text: 'request fullscreen'
-                    },
-                    {
-                        opcode: 'exitFullscreen',
-                        blockType: Scratch.BlockType.COMMAND,
-                        text: 'exit fullscreen'
-                    },
-                    {
-                        opcode: 'toggleFullscreen',
-                        blockType: Scratch.BlockType.COMMAND,
-                        text: 'toggle fullscreen'
                     },
                     {
                         opcode: 'resetCounts',
@@ -276,6 +261,14 @@
             return _isFullscreen ? 'yes' : 'no';
         }
 
+        fullscreenStateOnOff() {
+            return _isFullscreen ? 'on' : 'off';
+        }
+
+        fullscreenStateBinary() {
+            return _isFullscreen ? 'true' : 'false';
+        }
+
         whenEnterFullscreen() {
             return _pendingEnter;
         }
@@ -308,6 +301,11 @@
             return _getTotalMs();
         }
 
+        secondsSinceLastChange() {
+            if (_lastChangedAt === null) return 0;
+            return +((Date.now() - _lastChangedAt) / 1000).toFixed(2);
+        }
+
         lastChangedTimestamp() {
             return _lastChangedAt !== null ? _lastChangedAt : 0;
         }
@@ -318,58 +316,6 @@
 
         lastExitedTimestamp() {
             return _exitedAt !== null ? _exitedAt : 0;
-        }
-
-        secondsSinceLastChange() {
-            if (_lastChangedAt === null) return 0;
-            return ((Date.now() - _lastChangedAt) / 1000).toFixed(2);
-        }
-
-        fullscreenElementTag() {
-            const el = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-            return el ? el.tagName.toLowerCase() : '';
-        }
-
-        fullscreenElementId() {
-            const el = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-            return el ? (el.id || '') : '';
-        }
-
-        hasFullscreenElement() {
-            return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-        }
-
-        requestFullscreen() {
-            const el = document.documentElement;
-            if (el.requestFullscreen) {
-                el.requestFullscreen().catch(() => {});
-            } else if (el.webkitRequestFullscreen) {
-                el.webkitRequestFullscreen();
-            } else if (el.mozRequestFullScreen) {
-                el.mozRequestFullScreen();
-            } else if (el.msRequestFullscreen) {
-                el.msRequestFullscreen();
-            }
-        }
-
-        exitFullscreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen().catch(() => {});
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
-
-        toggleFullscreen() {
-            if (_isFullscreen) {
-                this.exitFullscreen();
-            } else {
-                this.requestFullscreen();
-            }
         }
 
         resetCounts() {
